@@ -1,10 +1,7 @@
 import Phaser from 'phaser';
 import { CombatScene } from './scenes/CombatScene';
 import { PlayerTestScene } from './scenes/PlayerTestScene';
-
-// Check URL for scene selection
-const urlParams = new URLSearchParams(window.location.search);
-const sceneName = urlParams.get('scene') || 'player-test'; // Default to player test
+import { PracticeUI } from './ui/PracticeUI';
 
 // Game configuration
 const config: Phaser.Types.Core.GameConfig = {
@@ -17,7 +14,8 @@ const config: Phaser.Types.Core.GameConfig = {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    scene: sceneName === 'combat' ? [CombatScene] : [PlayerTestScene, CombatScene]
+    // CombatScene first = Default Scene
+    scene: [CombatScene, PlayerTestScene, PracticeUI]
 };
 
 // Create the game
