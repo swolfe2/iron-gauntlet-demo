@@ -1,6 +1,8 @@
 node_modules
+node_modules
 dist
-dist-ssr
+div-ssr
+!docs
 *.local
 .DS_Store
 *.log
