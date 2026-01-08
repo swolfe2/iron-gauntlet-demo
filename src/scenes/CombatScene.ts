@@ -209,13 +209,48 @@ export class CombatScene extends Phaser.Scene {
     }
 
     private setupInput(): void {
-        // 1. Mouse Tracking (Passive Block)
+        // --- INPUTS ---
+        // 1. Mobile Touch Zones (Background Layer)
+        const zoneWidth = 540 / 3;
+        const zoneHeight = 960;
+
+        // Left Zone
+        this.add.zone(0, 0, zoneWidth, zoneHeight)
+            .setOrigin(0, 0)
+            .setInteractive()
+            .on('pointerdown', () => {
+                if (this.tutorialActive) return;
+                this.handleShieldMove(COMBAT_CONFIG.ZONE_LEFT);
+            });
+
+        // Center Zone
+        this.add.zone(zoneWidth, 0, zoneWidth, zoneHeight)
+            .setOrigin(0, 0)
+            .setInteractive()
+            .on('pointerdown', () => {
+                if (this.tutorialActive) return;
+                this.handleShieldMove(COMBAT_CONFIG.ZONE_CENTER);
+            });
+
+        // Right Zone
+        this.add.zone(zoneWidth * 2, 0, zoneWidth, zoneHeight)
+            .setOrigin(0, 0)
+            .setInteractive()
+            .on('pointerdown', () => {
+                if (this.tutorialActive) return;
+                this.handleShieldMove(COMBAT_CONFIG.ZONE_RIGHT);
+            });
+
+        // 2. Mouse/Touch Tracking (Hybrid - Dragging still works)
         this.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
-            const zone = this.getZoneFromX(pointer.x);
-            this.handleShieldMove(zone);
+            if (this.tutorialActive) return;
+            // Only update if moving significantly (prevents jitter override)
+            if (pointer.isDown) {
+                 this.handleShieldMove(this.getZoneFromX(pointer.x));
+            }
         });
         
-        // 2. Click (Active Parry / Attack)
+        // 3. Click (Active Parry / Attack)
         this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
             const zone = this.getZoneFromX(pointer.x);
             
